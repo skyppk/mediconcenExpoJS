@@ -15,6 +15,8 @@ import logo from '../../Img/mediconcenLogo.png';
 import InputField from "../../Component/InputField";
 import PasswordField from "../../Component/PasswordField";
 import Service from "../../Services";
+import AsyncStorage from "@react-native-community/async-storage";
+
 import setAuthorization from "../../Services/author";
 
 const {width: WIDTH} = Dimensions.get('window')
@@ -49,7 +51,12 @@ class LoginScreen extends React.Component {
     }
 
     loginCallback = () =>  Service.login(this.state, response => {
-        console.log(response.data)
+        const token = response.data.access_token;
+        const info = response.data.info;
+        console.log(info.clinic)
+        AsyncStorage.setItem('clinic', info.clinic);
+        setAuthorization(token)
+        this.props.navigation.navigate('Home')
         }
     )
 

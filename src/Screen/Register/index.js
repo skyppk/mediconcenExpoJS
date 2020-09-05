@@ -3,7 +3,6 @@ import {
     StyleSheet,
     Text,
     View,
-    TextInput,
     Dimensions,
     TouchableOpacity,
     KeyboardAvoidingView,
@@ -34,6 +33,77 @@ class RegisterScreen extends React.Component {
             isReShow: false
         };
 
+    }
+
+    checkBeforeLogin = () => {
+        let emailreg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        let phonereg = /^[0-9]{8}$/;
+        if (emailreg.test(this.state.emailText) == false ){
+            Alert.alert(
+                "Validation",
+                "Wrong email format !",
+                [
+                    {
+                        text: "OK",
+                        onPress: () => {}
+                    }
+                ]
+            )
+            return false
+        }else if (this.state.passwordText == ""){
+            Alert.alert(
+                "Validation",
+                "Password and Repeated password cannot empty !",
+                [
+                    {
+                        text: "OK",
+                        onPress: () => {}
+                    }
+                ]
+            )
+            return false
+        }else if (this.state.passwordText !== this.state.repasswordText){
+            Alert.alert(
+                "Validation",
+                "Password and Repeated password not same !",
+                [
+                    {
+                        text: "OK",
+                        onPress: () => {}
+                    }
+                ]
+            )
+            return false
+        }else if (phonereg.test(this.state.phoneText) == false){
+            Alert.alert(
+                "Validation",
+                "Phone number should be 8 digit !",
+                [
+                    {
+                        text: "OK",
+                        onPress: () => {}
+                    }
+                ]
+            )
+            return false
+        }
+
+        return true
+
+
+    }
+
+    validate(text, type){
+        let emailreg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+       if (type == "email"){
+            if (emailreg.test(text) == false){
+                return false
+            }
+       }else if (type == "password"){
+           if (!this.state.passwordText == this.state.repasswordText){
+               return false
+           }
+       }
     }
 
     setEmailText = (text) => {
@@ -77,7 +147,8 @@ class RegisterScreen extends React.Component {
     }
 
     registerAccount = () => {
-        Service.register(this.state, response => {
+        if (this.checkBeforeLogin()){
+            Service.register(this.state, response => {
                 Alert.alert(
                     "Register",
                     response.data.message,
@@ -89,7 +160,9 @@ class RegisterScreen extends React.Component {
                     ]
                 )
 
-        })
+            })
+        }
+
 
     }
 
@@ -100,7 +173,7 @@ class RegisterScreen extends React.Component {
                 behavior={Platform.OS == "ios" ? "padding" : "height"}
             >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <View style={styles.container}>
+                    <View style={styles.form}>
 
                         <InputField
                             icon={'envelope'}
@@ -168,8 +241,12 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
+        // padding: 20,
+        justifyContent: 'flex-start',
+    },
+    form:{
+        // flexDirection: "column",
         padding: 20
-        // justifyContent: 'center',
     },
     inputContainer:{
         marginTop: 10
@@ -199,8 +276,10 @@ const styles = StyleSheet.create({
         height: 45,
         borderRadius: 25,
         backgroundColor: '#6769ef',
+        alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 20
+        marginTop: 20,
+        marginHorizontal: 25
     },
     registerText: {
         color: 'rgba(255, 255, 255, 0.7)',

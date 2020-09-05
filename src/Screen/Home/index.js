@@ -19,7 +19,8 @@ class HomeScreen extends React.Component {
     constructor() {
         super();
         this.state = {
-            consultationRecords: []
+            consultationRecords: [],
+            isRefreshing: false
         }
 
         Service.getAllRecords(response => {
@@ -30,7 +31,7 @@ class HomeScreen extends React.Component {
 
 
     getRecordsCallback = () =>  Service.getAllRecords(response => {
-            // console.log(response.data)
+            this.setState({consultationRecords: response.data.data})
         }
     )
 
@@ -44,10 +45,14 @@ class HomeScreen extends React.Component {
         return(
             <SafeAreaView style={styles.container}>
 
+                
+
                 <FlatList
                     style={styles.list}
                     // contentContainerStyle={{paddingBottom: 20}}
                     data={this.state.consultationRecords}
+                    onRefresh={this.getRecordsCallback}
+                    refreshing={this.state.isRefreshing}
                     renderItem={({item}) => (
                         <ListItem
                             record={item}
@@ -55,7 +60,7 @@ class HomeScreen extends React.Component {
                         />
                         )
                     }
-                    keyExtractor={item => item.id}
+                    // keyExtractor={item => item.id}
                     ListEmptyComponent={
                         <View style={{flex: 1, flexDirection: "row",  alignItems: "center",justifyContent: 'center', backgroundColor: '#be5959'}}>
                             <View

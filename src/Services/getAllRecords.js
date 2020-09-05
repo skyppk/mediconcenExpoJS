@@ -1,12 +1,19 @@
 import service from "./config";
+import AsyncStorage from "@react-native-community/async-storage";
+import {get} from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 // email, password, clinic, phone, address
 
-const getAllRecords =  (callback) => {
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiaWxsbGxsZ3N5QGV4YW1wbGUuY29tIiwiaWF0IjoxNTk5MzE3OTMyLCJleHAiOjE1OTkzMTg5MzJ9.1gmDE_0VbhLWsJKoENobo7ZxMYYR2gbY32m0yj0pqCs';
-    const jwtToken = 'Bearer ' + token;
+const getAllRecords =  async (callback) => {
 
-    service.get('/consultationRecord' ,{ headers:{'Authorization': jwtToken}})
+
+
+    const getClinic = await AsyncStorage.getItem('clinic')
+
+    const url = '/consultationRecord/' + getClinic
+
+
+    service.get(url)
         .then(callback)
         .catch(err => console.log(err));
 

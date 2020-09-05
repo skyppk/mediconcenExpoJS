@@ -12,6 +12,8 @@ import RegisterScreen from "./src/Screen/Register";
 import HomeScreen from "./src/Screen/Home";
 import DetailsScreen from "./src/Screen/Details";
 
+
+
 const store = createStore(mainReducer);
 const Stack = createStackNavigator();
 
@@ -20,10 +22,10 @@ export default function App() {
   return (
       <Provider store={store}>
           <NavigationContainer>
-              <Stack.Navigator initalRouteName={"Home"}>
-                  <Stack.Screen options={{headerShown: false}} name={"Home"} component={HomeScreen} />
-                  {/*<Stack.Screen options={{headerShown: false}} name={"Login"} component={LoginScreen} />*/}
+              <Stack.Navigator initalRouteName={"Login"}>
+                  <Stack.Screen options={{headerShown: false}} name={"Login"} component={LoginScreen} />
                   <Stack.Screen name={"Register"} component={RegisterScreen} />
+                  <Stack.Screen options={{headerShown: false}} name={"Home"} component={HomeScreen} />
                   <Stack.Screen name={"Details"} component={DetailsScreen} />
               </Stack.Navigator>
           </NavigationContainer>
