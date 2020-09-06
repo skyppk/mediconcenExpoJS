@@ -13,7 +13,7 @@ const ListItem = ({record, navigate}) => {
         <View style={styles.item}>
             <Text style={styles.title}>Patient: {record.patient}</Text>
             <Text style={styles.details}>Doctor: {record.doctor}</Text>
-            <Text style={styles.details}>Date: {record.date}</Text>
+            <Text style={styles.details}>Date: {record.date.split('T')[0]}</Text>
             <View style={styles.btnView}>
                 <TouchableOpacity
                     style={styles.detailsBtn}
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         padding: 10,
         marginVertical: 6,
-        marginHorizontal: 10,
+        // marginHorizontal: 10,
         elevation: 2,
         shadowColor: '#000000',
         shadowOpacity: 0.4,
@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
         },
         flex:1,
         flexDirection: 'column',
+        width: '100%'
     },
     title: {
        fontSize: 22

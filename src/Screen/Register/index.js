@@ -10,7 +10,6 @@ import {
     Keyboard,
     Alert
 } from "react-native";
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import InputField from "../../Component/InputField";
 import PasswordField from "../../Component/PasswordField";
 import Service from "../../Services";
@@ -50,10 +49,10 @@ class RegisterScreen extends React.Component {
                 ]
             )
             return false
-        }else if (this.state.passwordText == ""){
+        }else if (this.state.passwordText == "" || this.state.passwordText.length < 8 ){
             Alert.alert(
                 "Validation",
-                "Password and Repeated password cannot empty !",
+                "Password and Repeated password must be more than 8 character !",
                 [
                     {
                         text: "OK",
@@ -93,18 +92,18 @@ class RegisterScreen extends React.Component {
 
     }
 
-    validate(text, type){
-        let emailreg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-       if (type == "email"){
-            if (emailreg.test(text) == false){
-                return false
-            }
-       }else if (type == "password"){
-           if (!this.state.passwordText == this.state.repasswordText){
-               return false
-           }
-       }
-    }
+    // validate(text, type){
+    //     let emailreg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    //    if (type == "email"){
+    //         if (emailreg.test(text) == false){
+    //             return false
+    //         }
+    //    }else if (type == "password"){
+    //        if (!this.state.passwordText == this.state.repasswordText){
+    //            return false
+    //        }
+    //    }
+    // }
 
     setEmailText = (text) => {
         this.setState({emailText: text});

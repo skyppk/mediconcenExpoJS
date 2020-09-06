@@ -19,34 +19,11 @@ const {height: Height} = Dimensions.get('window')
 class DetailsScreen extends React.Component {
     constructor() {
         super();
-        this.state = {
-            consultationRecords: []
-        }
-
-        Service.getAllRecords(response => {
-            this.setState({consultationRecords: response.data.data})
-        })
-
     }
-
-
-    getRecordsCallback = () =>  Service.getAllRecords(response => {
-            console.log(response.data)
-        }
-    )
-
 
 
     render() {
         const {details} = this.props.route.params;
-        console.log(details)
-
-        // doctor name,
-        //     patient name,
-        //     diagnosis, medication,
-        //     consultation fee,
-        //     date and time,
-        //     and whether there is a follow-up consultation
 
         return(
             <View style={styles.container}>
@@ -57,7 +34,7 @@ class DetailsScreen extends React.Component {
                         <Text style={styles.text}>Diagnosis : {details.diagnosis}</Text>
                         <Text style={styles.text}>Medication : {details.medication}</Text>
                         <Text style={styles.text}>Consultation Fee : ${details.fee}</Text>
-                        <Text style={styles.text}>Date : {details.date}</Text>
+                        <Text style={styles.text}>Date : {details.date.split('T')[0]} {details.date.split('T')[1].split('.')[0]}</Text>
                         <Text style={styles.text}>Follow-up : {details.followup}</Text>
                     </ScrollView>
 

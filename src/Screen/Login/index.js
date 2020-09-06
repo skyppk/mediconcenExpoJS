@@ -8,7 +8,7 @@ import {
     TouchableOpacity,
     KeyboardAvoidingView,
     TouchableWithoutFeedback,
-    Keyboard
+    Keyboard, Alert
 } from "react-native";
 import logo from '../../Img/mediconcenLogo.png';
 
@@ -42,21 +42,29 @@ class LoginScreen extends React.Component {
 
     setEmailText = (text) => {
         this.setState({emailText: text})
-        console.log(this.state.emailText)
     }
 
     setPasswordText = (text) => {
         this.setState({passwordText: text})
-        console.log(this.state.passwordText)
     }
 
     loginCallback = () =>  Service.login(this.state, response => {
         const token = response.data.access_token;
         const info = response.data.info;
-        console.log(info.clinic)
         AsyncStorage.setItem('clinic', info.clinic);
         setAuthorization(token)
         this.props.navigation.navigate('Home')
+        }, err => {
+            Alert.alert(
+                "Failed Login",
+                "Your email or password wrong !",
+                [
+                    {
+                        text: "OK",
+                        onPress: () => {}
+                    }
+                ]
+            )
         }
     )
 
