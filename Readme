@@ -2,3 +2,5 @@ use two days try to develop with typescript but not success so change it back to
 Services config is handle api connection
 baseURL: 'http://192.168.50.76:3000' cannot use localhost or 127.0.0.1
 jwt expired will not refresh now need to logout and login again
+
+you can create account which when input clinic Mediconcen show data with same month

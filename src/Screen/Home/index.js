@@ -15,7 +15,8 @@ import {
 import Service from "../../Services";
 import ListItem from "../../Component/ListItem";
 import setAuthorization from "../../Services/author";
-import {get} from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import moment from "moment";
+
 
 const {width: WIDTH} = Dimensions.get('window')
 
@@ -27,10 +28,8 @@ class HomeScreen extends React.Component {
             consultationRecords: [],
             groupRecords:[],
             isRefreshing: false,
-            // isDaily: true,
-            // displayType: 'Daily'
-            isDaily: false,
-            displayType: 'Monthly'
+            isDaily: true,
+            displayType: 'Daily'
         }
 
 
@@ -63,9 +62,11 @@ class HomeScreen extends React.Component {
     }
 
     grouprecords = (type) => {
+        let groups;
+        let groupArrays;
         switch (type){
             case 'Monthly':
-                const groups = this.state.consultationRecords.reduce((groups, records) => {
+                groups = this.state.consultationRecords.reduce((groups, records) => {
                     const date = records.date.split('-')[0] + '-'  + records.date.split('-')[1]
                     if (!groups[date]) {
                         groups[date] = []
@@ -74,7 +75,7 @@ class HomeScreen extends React.Component {
                     return groups
                 },{})
 
-                const groupArrays = Object.keys(groups).map((date) => {
+                groupArrays = Object.keys(groups).map((date) => {
                     return {
                         date,
                         records: groups[date]
@@ -84,7 +85,24 @@ class HomeScreen extends React.Component {
                 this.setState({groupRecords: groupArrays, isDaily: false, displayType: 'Monthly'})
                 break
             case 'Weekly':
-                this.setState({ isDaily: false, displayType: 'Weekly'})
+                groups = this.state.consultationRecords.reduce((groups, records) => {
+                    const date = `${moment(records.date).year()} : ${moment(records.date).week()} week`
+                    if (!groups[date]) {
+                        groups[date] = []
+                    }
+                    groups[date].push(records)
+                    return groups
+                },{})
+
+
+                groupArrays = Object.keys(groups).map((date) => {
+                    return {
+                        date,
+                        records: groups[date]
+                    }
+                })
+
+                this.setState({groupRecords: groupArrays, isDaily: false, displayType: 'Weekly'})
                 break
             default:
                 this.setState({isDaily: true, displayType: 'Daily'})
@@ -94,65 +112,6 @@ class HomeScreen extends React.Component {
 
 
     render() {
-
-        let recordList;
-
-        if (this.state.isDaily){
-            recordList = <FlatList
-                style={styles.list}
-                // contentContainerStyle={{paddingBottom: 20}}
-                data={this.state.consultationRecords}
-                onRefresh={this.getRecordsCallback}
-                refreshing={this.state.isRefreshing}
-                renderItem={({item}) => (
-                        <ListItem
-                            record={item}
-                            navigate={() => this.seeDetails(item)}
-                        />
-                        )
-                }
-                keyExtractor={item => item.id.toString()}
-                ListEmptyComponent={
-                    <View style={{flex: 1, flexDirection: "row",  alignItems: "center",justifyContent: 'center', backgroundColor: '#be5959'}}>
-                        <View
-                            style={{
-                                flex: 1,
-                                alignItems: "center",
-                                justifyContent: 'center',
-                                borderRadius: 5,
-                                borderColor: "grey",
-                                borderWidth: 2,
-                                backgroundColor: "#fff",
-                                width: "80%",
-                                padding: 10,
-                                // marginTop: 20
-                            }}>
-                            <Text>{'No records for the clinic now , pull down to refresh !'}</Text>
-                        </View>
-                    </View>
-                }
-            />
-        } else {
-            recordList = <ScrollView>
-                {this.state.groupRecords.map((item,key) =>
-                     <Text>hihi</Text>
-                )}
-                {/*<FlatList*/}
-                {/*    style={styles.list}*/}
-                {/*    // contentContainerStyle={{paddingBottom: 20}}*/}
-                {/*    data={this.state.consultationRecords}*/}
-                {/*    onRefresh={this.getRecordsCallback}*/}
-                {/*    refreshing={this.state.isRefreshing}*/}
-                {/*    renderItem={({item}) => (*/}
-                {/*        <ListItem*/}
-                {/*            record={item}*/}
-                {/*            navigate={() => this.seeDetails(item)}*/}
-                {/*        />*/}
-                {/*    )*/}
-                {/*    }*/}
-                {/*/>*/}
-            </ScrollView>
-        }
 
         return(
             <SafeAreaView style={styles.container}>
@@ -206,28 +165,6 @@ class HomeScreen extends React.Component {
                                         navigate={() => this.seeDetails(record)}
                                     />
 
-
-                                    // <FlatList
-                                    //     style={styles.insideList}
-                                    //     data={item.records}
-                                    //     keyExtractor={(item2, index) => index.toString()}
-                                    //     listKey={(item2,index) => 'D' + index.toString()}
-                                    //     renderItem={({getrecord}) => (
-                                    //         <View style={{flex:1,
-                                    //             flexDirection: 'column',}}>
-                                    //             <Text>hi {getrecord}</Text>
-                                    //             <Text>hi {getrecord}</Text>
-                                    //             <Text>hi {getrecord}</Text>
-                                    //             <Text>hi {getrecord}</Text>
-                                    //
-                                    //         </View>
-                                    //
-                                    //         // <ListItem
-                                    //         //     record={getrecord}
-                                    //         //     navigate={() => this.seeDetails(getrecord)}
-                                    //         // />
-                                    //     )}
-                                    // />
                                 )}
 
 
